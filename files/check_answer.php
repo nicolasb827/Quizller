@@ -2,9 +2,9 @@
     session_start();
 
     include '../database/config.php';
-    $selected_option = $_POST['selected_option'];
-    $question_id = $_POST['question_id'];
-    $score_earned = $_POST['score'];
+    $selected_option = mysqli_real_escape_string($conn,$_POST['selected_option']);
+    $question_id = mysqli_real_escape_string($conn,$_POST['question_id']);
+    $score_earned = mysqli_real_escape_string($conn,$_POST['score']);
     $student_details = json_decode($_SESSION['student_details']);
     $student_id;
 
@@ -31,6 +31,9 @@
             //increase question wrong count
             $sql = "UPDATE score set wrong_count = wrong_count + 1 where question_id = '$question_id'";
             mysqli_query($conn,$sql);
+            $sql = "INSERT INTO score_question_student SET score = 0, student = '".$student_id."', question = '" . $question_id."'";
+			error_log($sql);
+			mysqli_query($conn,$sql);
             echo "WRONG_ANSWER";
         }
     }

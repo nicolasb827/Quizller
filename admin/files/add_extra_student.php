@@ -1,8 +1,9 @@
 <?php
     $id;
 	include "../../database/config.php";
+    include __DIR__ . '/randomString.php';
    
-        $classes = "SELECT id FROM classes where name = '".$_POST['class_name']."' ";
+        $classes = "SELECT id FROM classes where name = '".mysqli_real_escape_string($conn,$_POST['class_name'])."' ";
         $result = mysqli_query($conn, $classes);
                 
         if (mysqli_num_rows($result) > 0) {
@@ -11,7 +12,9 @@
                 $id  = $row['id'];
             }
                     
-        $sql = "INSERT INTO student_data (rollno, class_id) VALUES ('".$_POST['extra_roll_number']."', $id)";
+        $insert_student = "INSERT INTO students (rollno, password, score, status) VALUES ('" . mysqli_real_escape_string($conn,$_POST['extra_roll_number']) . "', '" . generateRandomString(12) ."', 0, 0)";
+        mysqli_query($conn, $insert_student);
+        $sql = "INSERT INTO student_data (id, class_id) VALUES ('".mysqli_real_escape_string($conn,$_POST['extra_roll_number'])."', $id)";
 
         if (mysqli_query($conn, $sql)) {
             echo "New record created successfully";

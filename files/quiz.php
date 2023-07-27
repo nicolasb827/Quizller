@@ -203,11 +203,16 @@
             	temp1.style.display = 'none';
 
                 $('#qid').text(question_count);
-                $('#question').text(question_data.title);
-                $('#optionA').text('A)   ' + question_data.optionA);
-                $('#optionB').text('B)   ' + question_data.optionB);
-                $('#optionC').text('C)   ' + question_data.optionC);
-                $('#optionD').text('D)   ' + question_data.optionD);
+                $('#question').html(question_data.title);
+                $('#optionA').html('A)   ' + question_data.optionA);
+                $('#optionB').html('B)   ' + question_data.optionB);
+                if (question_data.optionC.length > 0) {
+                $('#optionC').html('C)   ' + question_data.optionC);
+                $('#optionD').html('D)   ' + question_data.optionD);
+                } else {
+                $('#optionC').html('');
+                $('#optionD').html('');
+				}
                 question_count++;
             }
 

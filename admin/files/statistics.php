@@ -74,7 +74,7 @@ if(!isset($_SESSION["user_id"]))
                   <?php
                     include '../../database/config.php';
                     $user_id = $_SESSION["user_id"];
-                    $sql = "select * from tests where teacher_id = $user_id and status_id = 3";
+                    $sql = "select * from tests where teacher_id = $user_id and status_id = 3 or status_id = 2";
                     $result = mysqli_query($conn,$sql);
                     if(mysqli_num_rows($result) > 0) {
                       while($row = mysqli_fetch_assoc($result)) {

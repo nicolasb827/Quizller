@@ -4,6 +4,8 @@ if(!isset($_SESSION["user_id"]))
   header("Location:../index.php");
 
 include '../../database/config.php';
+include __DIR__ .'/randomString.php';
+
 if(isset($_POST['new_test'])) {
   $test_name = $_POST['test_name'];
   $test_subject = $_POST['subject_name'];
@@ -28,16 +30,6 @@ if(isset($_POST['new_test'])) {
     $class_id = $class_row["id"];
   }
 
-  function generateRandomString($length = 8) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
-  }
-
   $teacher_id = $_SESSION["user_id"];
   //creating new test
   $sql = "INSERT INTO tests(teacher_id, name, date, status_id, subject, total_questions,class_id) VALUES('$teacher_id','$test_name','$test_date','$status_id','$test_subject','$total_questions','$class_id')";
@@ -45,18 +37,10 @@ if(isset($_POST['new_test'])) {
   $test_id = mysqli_insert_id($conn);
   if($result) {
     //creating student entry in students table for the test
-    $sql1 = "select id from student_data where class_id = '$class_id'";
+    $sql1 = "update students set test_id = '" . $test_id . "' where rollno in (select ID from student_data where class_id =  '" . $class_id . "')";
     $result1 = mysqli_query($conn,$sql1);
-    $temp = 8 - strlen($test_id);
-    while($row1 = mysqli_fetch_assoc($result1)) {
-      $rollno = $row1["id"];
-      $random = generateRandomString($temp);
-      $random = $random . $test_id;
-      $sql2 = "INSERT INTO students(test_id,rollno,password,score,status) VALUES ('$test_id','$rollno','$random',0,0)";
-      $result2 = mysqli_query($conn,$sql2);
-      if($result2) {
-        header("Location:dashboard.php");
-      }
+    if($result1) {
+      header("Location:dashboard.php");
     }
   }
 }

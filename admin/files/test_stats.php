@@ -97,13 +97,10 @@
                       $i = 1;
                       while($row = mysqli_fetch_assoc($result)) {
                         $roll_no = $row["rollno"];
-                        $sql1 = "select rollno from student_data where id = '$roll_no'";
-                        $result1 = mysqli_query($conn,$sql1);
-                        $row1 = mysqli_fetch_assoc($result1);
                         ?>
                         <tr>
                           <td><?= $i; ?></td>
-                          <td><?= $row1["rollno"]; ?></td>
+                          <td><?= $row["rollno"]; ?></td>
                           <td><?= $row["score"]; ?></td>
                         </tr>
 
